@@ -244,6 +244,7 @@ npm run watch-tests
 ```bash
 # Create production-ready package
 npm run package
+npm run compile && npm run package && npm run vsce:package
 
 # This creates a .vsix file that can be:
 # 1. Installed locally with: code --install-extension <file.vsix>
