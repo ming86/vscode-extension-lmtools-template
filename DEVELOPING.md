@@ -32,16 +32,71 @@ A Language Model Tool is a function that can be invoked by AI agents (like GitHu
 ### Prerequisites
 
 - Node.js (v18 or higher)
-- VS Code (v1.105.0 or higher)
+- VS Code (v1.105.0 or higher) or VS Code Insiders
 - TypeScript knowledge
 
+### Installation & Setup
+
+```bash
+# Install dependencies
+npm install
+
+# Compile TypeScript to JavaScript
+npm run compile
+
+# Watch mode for development (recompiles on file changes)
+npm run watch
+
+# Run linter
+npm run lint
+
+# Run tests
+npm test
+
+# Build production package
+npm run package
+```
+
 ### Running the Example
+
+### Option 1: Launch Extension Development Host (Recommended)
 
 1. Press `F5` in VS Code to launch Extension Development Host
 2. Open GitHub Copilot Chat
 3. Try these prompts:
    - "What time is it?" (agent mode will invoke automatically)
    - "Use #time to get the current time" (explicit reference)
+
+### Option 2: Install from VSIX file
+
+```bash
+# Create VSIX package
+npm run package
+
+# Install in VS Code
+code --install-extension example-lm-tools-0.0.1.vsix
+
+# Install in VS Code Insiders
+code-insiders --install-extension example-lm-tools-0.0.1.vsix
+
+# Uninstall extension
+code --uninstall-extension ming86.example-lm-tools
+code-insiders --uninstall-extension ming86.example-lm-tools
+```
+
+### Available npm Commands
+
+| Command | Purpose |
+|---------|---------|
+| `npm run compile` | Compile TypeScript to JavaScript (one-time) |
+| `npm run watch:esbuild` | Watch for file changes and rebuild automatically |
+| `npm run watch:tsc` | Type-check in watch mode |
+| `npm run watch` | Run both esbuild and tsc in watch mode (recommended during development) |
+| `npm run lint` | Run ESLint to check code quality |
+| `npm run check-types` | Type-check without emitting files |
+| `npm test` | Run test suite |
+| `npm run package` | Build production-ready VSIX package |
+| `npm run vscode:prepublish` | Prepare for VS Code Marketplace publication |
 
 ## Architecture Overview
 
@@ -152,6 +207,74 @@ Check the Debug Console for:
 - Extension activation messages
 - Tool registration confirmation
 - Any runtime errors
+
+### Development Workflows
+
+#### Hot Reload During Development
+
+```bash
+# Terminal 1: Watch TypeScript and rebuild on changes
+npm run watch
+
+# Terminal 2: (In VS Code) Press F5 to launch Extension Development Host
+# Code changes will be compiled automatically, reload extension (Ctrl+R) to test
+```
+
+#### Testing and Linting
+
+```bash
+# Check code quality
+npm run lint
+
+# Fix linting errors automatically
+npm run lint -- --fix
+
+# Type-check (without compilation)
+npm run check-types
+
+# Run test suite
+npm test
+
+# Run tests in watch mode (if supported)
+npm run watch-tests
+```
+
+#### Building for Distribution
+
+```bash
+# Create production-ready package
+npm run package
+
+# This creates a .vsix file that can be:
+# 1. Installed locally with: code --install-extension <file.vsix>
+# 2. Published to VS Code Marketplace
+# 3. Shared with users for manual installation
+```
+
+#### VS Code Command Line Interface
+
+```bash
+# List installed extensions
+code --list-extensions
+
+# List installed extensions with versions
+code --list-extensions --show-versions
+
+# Install multiple extensions
+code --install-extension <publisher>.<name> --install-extension <publisher>.<name>
+
+# Uninstall extension
+code --uninstall-extension <publisher>.<name>
+
+# Open project in VS Code
+code /path/to/project
+
+# Open VS Code Insiders instead
+code-insiders --install-extension example-lm-tools-0.0.1.vsix
+
+# Run tests from command line
+code --extensionDevelopmentPath=/path/to/extension --extensionTestsPath=/path/to/test /path/to/workspace
+```
 
 ## Best Practices
 
