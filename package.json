@@ -17,6 +17,15 @@
         "command": "example-lm-tools.helloWorld",
         "title": "Hello World"
       }
+    ],
+    "languageModelTools": [
+      {
+        "name": "get_current_time",
+        "displayName": "Get Current Time",
+        "modelDescription": "Returns the current date and time. Use this tool when you need to know the current time, date, or timestamp. The tool returns the time in a human-readable format.",
+        "canBeReferencedInPrompt": true,
+        "toolReferenceName": "time"
+      }
     ]
   },
   "scripts": {
