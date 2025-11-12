@@ -34,7 +34,7 @@ For detailed architecture documentation, see [ARCHITECTURE.md](./ARCHITECTURE.md
 ### Prerequisites
 
 - Node.js 22.x or higher
-- VS Code 1.105.0 or higher
+- VS Code 1.101.0 or higher
 - Git
 
 ### Installation

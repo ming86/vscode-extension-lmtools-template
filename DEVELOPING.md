@@ -32,7 +32,7 @@ A Language Model Tool is a function that can be invoked by AI agents (like GitHu
 ### Prerequisites
 
 - Node.js (v18 or higher)
-- VS Code (v1.105.0 or higher) or VS Code Insiders
+- VS Code (v1.101.0 or higher) or VS Code Insiders
 - TypeScript knowledge
 
 ### Installation & Setup
