@@ -1,103 +1,65 @@
-# Example LM Tools VS Code Extension
+# Time Tool for Copilot
 
-A template for building VS Code extensions with Language Model (LM) Tools. This template demonstrates best practices for creating AI-powered extensions with a clean, modular architecture.
+> **Note:** This README.md is example documentation for the extension marketplace page. When you create your own extension, customize this file to describe your tool to end users.
 
-## Features
+Get the current date and time instantly in GitHub Copilot Chat and with AI agents.
 
-- **LM Tools Support**: Includes an example tool (`get_current_time`) that can be invoked by GitHub Copilot Chat and AI agents
-- **Modular Architecture**: Well-organized code structure with separation of concerns
-- **TypeScript**: Full TypeScript support with type safety
-- **Modern Build**: Uses esbuild for fast compilation
-- **Example Command**: Includes a sample command to help you get started
+## What This Extension Does
 
-## Project Structure
+This extension adds a **Time Tool** to GitHub Copilot, allowing AI agents and Copilot to access the current time whenever they need it. Perfect for time-sensitive tasks, scheduling, and workflow automation.
 
-This template follows a modular architecture to keep code organized and maintainable:
+### Key Capabilities
+
+- ⏰ **Instant Time Access**: Get current date and time in one action
+- 🤖 **AI-Powered**: Works seamlessly with GitHub Copilot Chat and AI agents
+- 🔧 **Developer Friendly**: Built with TypeScript and best practices in mind
+- 📦 **Lightweight**: Minimal footprint, no external dependencies
+
+## How to Use
+
+### In GitHub Copilot Chat
+
+Simply mention the time tool in your prompt:
 
 ```text
-src/
-├── extension.ts              # Entry point - handles registration only
-├── commands/                 # Command handlers
-│   └── helloWorld.ts
-├── tools/                    # Language Model Tools
-│   └── getCurrentTimeTool.ts
-├── services/                 # Business logic and API integration
-├── utils/                    # Utility functions
-└── types/                    # TypeScript type definitions
-    └── index.ts
+What time is it? #time
 ```
 
-For detailed architecture documentation, see [ARCHITECTURE.md](./ARCHITECTURE.md).
+Or ask Copilot a question that requires knowing the current time:
 
-## Getting Started
-
-### Prerequisites
-
-- Node.js 22.x or higher
-- VS Code 1.101.0 or higher
-- Git
-
-### Installation
-
-1. Clone this repository or use it as a template
-2. Install dependencies:
-
-   ```bash
-   npm install
-   ```
-
-### Development
-
-1. Open the project in VS Code
-2. Press `F5` to open a new Extension Development Host window
-3. The extension will be automatically loaded
-
-### Building
-
-```bash
-# Development build
-npm run compile
-
-# Watch mode (automatically rebuilds on changes)
-npm run watch
-
-# Production build
-npm run package
+```text
+Should I take a break? It's been 3 hours since 9am #time
 ```
 
-### Testing the LM Tool
+### With AI Agents
 
-1. Open the Extension Development Host window (press `F5`)
+The extension automatically provides the time tool to AI agents that need it. When an agent requires the current time to complete a task, it will automatically invoke this tool.
+
+## Installation
+
+1. Install the extension from the VS Code Marketplace
 2. Open GitHub Copilot Chat
-3. Reference the tool in your prompt using `#time`
-4. The tool will also be automatically invoked by agents when they need the current time
+3. Start using `#time` in your prompts
 
-## Extending This Template
+## Requirements
 
-### Adding a New LM Tool
+- VS Code 1.101.0 or higher
+- GitHub Copilot Chat (free or paid subscription)
 
-1. Create a new file in `src/tools/` (e.g., `myTool.ts`)
-2. Implement the `vscode.LanguageModelTool` interface
-3. Add the tool configuration to `package.json` under `contributes.languageModelTools`
-4. Register the tool in `src/extension.ts`
+## Example Use Cases
 
-See [ARCHITECTURE.md](./ARCHITECTURE.md#adding-a-new-lm-tool) for detailed instructions.
+- **Scheduling**: "Schedule a meeting for 2 hours from now #time"
+- **Time Zone Info**: "What time is it now, and what's the UTC offset? #time"
+- **Productivity Tracking**: "How long have I been working? I started at 9am #time"
+- **Automation**: Use with other tools to create time-aware workflows
 
-### Adding a New Command
+## Extension Settings
 
-1. Create a new file in `src/commands/` (e.g., `myCommand.ts`)
-2. Export a function that implements the command logic
-3. Add the command to `package.json` under `contributes.commands`
-4. Register the command in `src/extension.ts`
+This extension works out of the box with no configuration needed.
 
-See [ARCHITECTURE.md](./ARCHITECTURE.md#adding-a-new-command) for detailed instructions.
+## Feedback & Issues
 
-## Resources
-
-- [VS Code Extension API](https://code.visualstudio.com/api/references/vscode-api)
-- [Language Model Tools Guide](https://code.visualstudio.com/api/extension-guides/ai/tools)
-- [Extension Anatomy](https://code.visualstudio.com/api/get-started/extension-anatomy)
-- [Publishing Extensions](https://code.visualstudio.com/api/working-with-extensions/publishing-extension)
+Have suggestions or found a bug? Please let us know by [opening an issue on GitHub](https://github.com/your-repo/issues).
 
 ## License
 

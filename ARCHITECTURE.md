@@ -2,6 +2,18 @@
 
 This document explains the modular architecture of the LM Tools extension template.
 
+## Documentation Overview
+
+This template includes three complementary documentation files:
+
+| File | Audience | Purpose |
+|------|----------|---------|
+| **[README.md](./README.md)** | End Users | User-facing marketplace documentation describing features, installation, and usage |
+| **[DEVELOPING.md](./DEVELOPING.md)** | Developers | Developer guide for building, testing, and extending the extension |
+| **[ARCHITECTURE.md](./ARCHITECTURE.md)** | Developers | Technical architecture, design principles, and project structure |
+
+When you customize this template for your extension, update README.md with your tool's specific features and use cases.
+
 ## Directory Structure
 
 ```text

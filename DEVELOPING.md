@@ -2,6 +2,14 @@
 
 This template provides a working example of a VS Code extension that implements a Language Model (LM) Tool. Use this as a reference and starting point for developing your own LM tools.
 
+## Documentation Files
+
+This template includes three main documentation files:
+
+- **[README.md](./README.md)** - User-facing documentation that displays on the VS Code Marketplace extension page. Customize this to describe your tool to end users, including features, usage, and use cases.
+- **[DEVELOPING.md](./DEVELOPING.md)** (this file) - Developer guide for extending and maintaining the extension.
+- **[ARCHITECTURE.md](./ARCHITECTURE.md)** - Technical documentation on the project structure and design principles for developers.
+
 ## Table of Contents
 
 - [What is an LM Tool?](#what-is-an-lm-tool)
