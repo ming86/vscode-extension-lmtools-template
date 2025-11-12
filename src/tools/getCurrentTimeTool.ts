@@ -1,11 +1,12 @@
 import * as vscode from 'vscode';
+import { IGetTimeParameters } from '../types/index';
 
 /**
  * LM Tool that returns the current date and time.
  * 
- * This tool demonstrates the minimal implementation of a Language Model Tool that can be:
+ * This tool demonstrates the implementation of a Language Model Tool that can be:
  * - Invoked by agents automatically based on conversation context
- * - Referenced in prompts using #time
+ * - Referenced in prompts using #getCurrentTime
  * - Discovered by GitHub Copilot Chat
  * 
  * ## Key Concepts:
@@ -13,6 +14,7 @@ import * as vscode from 'vscode';
  * 1. **Tool Registration**: Tools must be registered in activate() using vscode.lm.registerTool()
  *    - The tool name must match the 'name' property in package.json
  *    - Registration returns a Disposable that should be added to context.subscriptions
+ *    - Tool names should use camelCase format (e.g., getCurrentTime, getSetting)
  * 
  * 2. **Tool Interface**: Implements vscode.LanguageModelTool<T> where T is the input parameter type
  *    - prepareInvocation(): Called before tool execution to prepare and optionally request user confirmation
@@ -41,15 +43,20 @@ import * as vscode from 'vscode';
  * - Users will see a dialog to approve/deny the tool invocation
  * - Users can choose "Always Allow" to skip future confirmations
  * 
+ * ## Naming Best Practices:
+ * - Tool names should use camelCase (e.g., getCurrentTime, getSetting, runCommand)
+ * - Tool names should start with a verb (get, set, run, fetch, etc.)
+ * - toolReferenceName for prompts should match the tool name
+ * 
  * ## Requirements:
  * - VS Code API version: ^1.105.0 or higher (for LM Tools support)
  * - Tool must be declared in package.json under contributes.languageModelTools
- * - Tool name format: {verb}_{noun} (e.g., get_current_time)
+ * - Tool name format: camelCase starting with a verb (e.g., getCurrentTime)
  * 
  * @see https://code.visualstudio.com/api/extension-guides/ai/tools
  * @see https://code.visualstudio.com/api/references/vscode-api#lm
  */
-export class GetCurrentTimeTool implements vscode.LanguageModelTool<{}> {
+export class GetCurrentTimeTool implements vscode.LanguageModelTool<IGetTimeParameters> {
 	/**
 	 * Prepares the tool for invocation. Called before invoke().
 	 * 
@@ -63,17 +70,23 @@ export class GetCurrentTimeTool implements vscode.LanguageModelTool<{}> {
 	 * @returns PreparedToolInvocation with optional confirmation and invocation messages
 	 */
 	async prepareInvocation(
-		options: vscode.LanguageModelToolInvocationPrepareOptions<{}>,
+		options: vscode.LanguageModelToolInvocationPrepareOptions<IGetTimeParameters>,
 		token: vscode.CancellationToken
 	): Promise<vscode.PreparedToolInvocation> {
+		const format = options.input.format || '12h';
+		const includeTimezone = options.input.includeTimezone !== false;
+		
 		return {
 			// Message shown while tool is executing
-			invocationMessage: 'Getting current time'
+			invocationMessage: `Getting current time (${format} format${includeTimezone ? ' with timezone' : ''})`,
 			// Optional: Add confirmation dialog
-			// confirmationMessages: {
-			//   title: 'Get Current Time',
-			//   message: 'Retrieve the current date and time?'
-			// }
+			confirmationMessages: {
+				title: 'Get Current Time',
+				message: new vscode.MarkdownString(
+					`Get current time in **${format}** format` +
+					(includeTimezone ? ' with **timezone** information' : '')
+				)
+			}
 		};
 	}
 
@@ -92,23 +105,46 @@ export class GetCurrentTimeTool implements vscode.LanguageModelTool<{}> {
 	 * @throws Error with LLM-friendly message on failure
 	 */
 	async invoke(
-		options: vscode.LanguageModelToolInvocationOptions<{}>,
+		options: vscode.LanguageModelToolInvocationOptions<IGetTimeParameters>,
 		token: vscode.CancellationToken
 	): Promise<vscode.LanguageModelToolResult> {
+		const params = options.input;
+		const format = params.format || '12h';
+		const includeTimezone = params.includeTimezone !== false;
+		
 		// Get current date and time
 		const now = new Date();
 		
-		// Format with locale-aware string including timezone
-		const timeString = now.toLocaleString('en-US', {
-			weekday: 'long',
-			year: 'numeric',
-			month: 'long',
-			day: 'numeric',
-			hour: '2-digit',
-			minute: '2-digit',
-			second: '2-digit',
-			timeZoneName: 'short'
-		});
+		// Format based on requested format
+		let timeString: string;
+		
+		if (format === '24h') {
+			// 24-hour format
+			timeString = now.toLocaleString('en-US', {
+				weekday: 'long',
+				year: 'numeric',
+				month: 'long',
+				day: 'numeric',
+				hour: '2-digit',
+				minute: '2-digit',
+				second: '2-digit',
+				hour12: false,
+				timeZoneName: includeTimezone ? 'short' : undefined
+			});
+		} else {
+			// 12-hour format (default)
+			timeString = now.toLocaleString('en-US', {
+				weekday: 'long',
+				year: 'numeric',
+				month: 'long',
+				day: 'numeric',
+				hour: '2-digit',
+				minute: '2-digit',
+				second: '2-digit',
+				hour12: true,
+				timeZoneName: includeTimezone ? 'short' : undefined
+			});
+		}
 		
 		// Return result as LanguageModelToolResult containing LanguageModelTextPart
 		// The LLM will use this text as part of its response

@@ -30,7 +30,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Register Language Model Tools
 	// Tool name must match 'name' in package.json under contributes.languageModelTools
-	const getCurrentTimeTool = vscode.lm.registerTool('get_current_time', new GetCurrentTimeTool());
+	const getCurrentTimeTool = vscode.lm.registerTool('getCurrentTime', new GetCurrentTimeTool());
 	context.subscriptions.push(getCurrentTimeTool);
 
 	// Register Commands

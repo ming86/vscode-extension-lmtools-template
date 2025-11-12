@@ -6,21 +6,15 @@
  */
 
 /**
- * Example interface for tool input parameters.
+ * Input parameters for the get_current_time Language Model Tool.
  * 
- * When adding input parameters to your LM tools:
- * 1. Define the interface here
- * 2. Update your tool class to implement vscode.LanguageModelTool<YourInterface>
- * 3. Add corresponding inputSchema to package.json
+ * This interface defines the schema for tool inputs that are validated against
+ * the JSON schema defined in package.json under inputSchema.
  * 
- * Example:
- * ```typescript
- * export interface IGetTimeParameters {
- *   timezone?: string;
- *   format?: '12h' | '24h';
- * }
- * ```
+ * @property format - The time format: '12h' (12-hour) or '24h' (24-hour)
+ * @property includeTimezone - Whether to include timezone information in the output
  */
-
-// Export your interfaces and types here
-export {};
+export interface IGetTimeParameters {
+  format?: '12h' | '24h';
+  includeTimezone?: boolean;
+}
