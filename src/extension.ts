@@ -1,161 +1,50 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 
+// Import tools
+import { GetCurrentTimeTool } from './tools/getCurrentTimeTool';
+
+// Import commands
+import { helloWorldCommand } from './commands/helloWorld';
+
 /**
- * LM Tool that returns the current date and time.
+ * Extension activation entry point.
  * 
- * This tool demonstrates the minimal implementation of a Language Model Tool that can be:
- * - Invoked by agents automatically based on conversation context
- * - Referenced in prompts using #time
- * - Discovered by GitHub Copilot Chat
+ * This function is called when your extension is activated.
+ * It handles registration of:
+ * - Language Model Tools
+ * - Commands
+ * - Event handlers
  * 
- * ## Key Concepts:
+ * All business logic is separated into respective modules:
+ * - tools/: LM tool implementations
+ * - commands/: Command handlers
+ * - services/: API integration and business logic
+ * - utils/: Utility functions
+ * - types/: Type definitions
  * 
- * 1. **Tool Registration**: Tools must be registered in activate() using vscode.lm.registerTool()
- *    - The tool name must match the 'name' property in package.json
- *    - Registration returns a Disposable that should be added to context.subscriptions
- * 
- * 2. **Tool Interface**: Implements vscode.LanguageModelTool<T> where T is the input parameter type
- *    - prepareInvocation(): Called before tool execution to prepare and optionally request user confirmation
- *    - invoke(): Called to execute the tool and return results
- * 
- * 3. **Input Parameters**: Type-safe parameters defined by:
- *    - Interface/type definition in TypeScript (e.g., IGetTimeParameters)
- *    - JSON schema in package.json's inputSchema property
- *    - Parameters are validated against the schema before invoke() is called
- * 
- * 4. **Tool Results**: Return vscode.LanguageModelToolResult containing:
- *    - LanguageModelTextPart: Plain text content
- *    - LanguageModelPromptTsxPart: Structured TSX content (advanced)
- *    - Results should be clear and LLM-friendly for easy parsing
- * 
- * ## Extending This Example:
- * 
- * To add input parameters:
- * 1. Define an interface (e.g., interface IGetTimeParams { timezone?: string; format?: '12h' | '24h'; })
- * 2. Update the class to implement vscode.LanguageModelTool<IGetTimeParams>
- * 3. Add inputSchema to package.json with the parameter definitions
- * 4. Use options.input.parameterName in the invoke() method
- * 
- * To add confirmation messages:
- * - Return confirmationMessages in prepareInvocation() with title and message
- * - Users will see a dialog to approve/deny the tool invocation
- * - Users can choose "Always Allow" to skip future confirmations
- * 
- * ## Requirements:
- * - VS Code API version: ^1.105.0 or higher (for LM Tools support)
- * - Tool must be declared in package.json under contributes.languageModelTools
- * - Tool name format: {verb}_{noun} (e.g., get_current_time)
- * 
- * @see https://code.visualstudio.com/api/extension-guides/ai/tools
- * @see https://code.visualstudio.com/api/references/vscode-api#lm
+ * @param context - Extension context provided by VS Code
+ * @see ARCHITECTURE.md for detailed architecture documentation
  */
-class GetCurrentTimeTool implements vscode.LanguageModelTool<{}> {
-	/**
-	 * Prepares the tool for invocation. Called before invoke().
-	 * 
-	 * This method can:
-	 * - Provide a custom invocation message shown to the user
-	 * - Request user confirmation with custom title/message
-	 * - Validate the input parameters (though they're already validated against schema)
-	 * 
-	 * @param options - Contains the validated input parameters
-	 * @param token - Cancellation token to check if operation was cancelled
-	 * @returns PreparedToolInvocation with optional confirmation and invocation messages
-	 */
-	async prepareInvocation(
-		options: vscode.LanguageModelToolInvocationPrepareOptions<{}>,
-		token: vscode.CancellationToken
-	): Promise<vscode.PreparedToolInvocation> {
-		return {
-			// Message shown while tool is executing
-			invocationMessage: 'Getting current time'
-			// Optional: Add confirmation dialog
-			// confirmationMessages: {
-			//   title: 'Get Current Time',
-			//   message: 'Retrieve the current date and time?'
-			// }
-		};
-	}
-
-	/**
-	 * Executes the tool and returns results.
-	 * 
-	 * This method:
-	 * - Receives validated input parameters in options.input
-	 * - Performs the tool's core functionality
-	 * - Returns results as LanguageModelToolResult
-	 * - Should throw errors with LLM-friendly messages if something goes wrong
-	 * 
-	 * @param options - Contains validated input parameters and tokenization options
-	 * @param token - Cancellation token to check if operation was cancelled
-	 * @returns LanguageModelToolResult containing the tool's output
-	 * @throws Error with LLM-friendly message on failure
-	 */
-	async invoke(
-		options: vscode.LanguageModelToolInvocationOptions<{}>,
-		token: vscode.CancellationToken
-	): Promise<vscode.LanguageModelToolResult> {
-		// Get current date and time
-		const now = new Date();
-		
-		// Format with locale-aware string including timezone
-		const timeString = now.toLocaleString('en-US', {
-			weekday: 'long',
-			year: 'numeric',
-			month: 'long',
-			day: 'numeric',
-			hour: '2-digit',
-			minute: '2-digit',
-			second: '2-digit',
-			timeZoneName: 'short'
-		});
-		
-		// Return result as LanguageModelToolResult containing LanguageModelTextPart
-		// The LLM will use this text as part of its response
-		return new vscode.LanguageModelToolResult([
-			new vscode.LanguageModelTextPart(`The current date and time is: ${timeString}`)
-		]);
-	}
-}
-
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+	console.log('Activating extension "example-lm-tools"');
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "example-lm-tools" is now active!');
+	// Register Language Model Tools
+	// Tool name must match 'name' in package.json under contributes.languageModelTools
+	const getCurrentTimeTool = vscode.lm.registerTool('get_current_time', new GetCurrentTimeTool());
+	context.subscriptions.push(getCurrentTimeTool);
 
-	/**
-	 * Register the LM tool with VS Code
-	 * 
-	 * Tool Registration:
-	 * - Use vscode.lm.registerTool() to register your tool
-	 * - First argument: tool name (must match 'name' in package.json)
-	 * - Second argument: instance of your tool class implementing LanguageModelTool
-	 * - Returns a Disposable that should be added to context.subscriptions for cleanup
-	 * 
-	 * Tool Discovery:
-	 * Once registered, the tool becomes available to:
-	 * - GitHub Copilot Chat (if canBeReferencedInPrompt: true in package.json)
-	 * - Agent mode for automatic invocation based on conversation context
-	 * - Users can reference it in prompts using # + toolReferenceName (e.g., #time)
-	 * 
-	 * @see https://code.visualstudio.com/api/references/vscode-api#lm.registerTool
-	 */
-	const tool = vscode.lm.registerTool('get_current_time', new GetCurrentTimeTool());
-	context.subscriptions.push(tool);
+	// Register Commands
+	// Command ID must match 'command' in package.json under contributes.commands
+	const helloWorld = vscode.commands.registerCommand('example-lm-tools.helloWorld', helloWorldCommand);
+	context.subscriptions.push(helloWorld);
 
-	const disposable = vscode.commands.registerCommand('example-lm-tools.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from Example LM Tools!');
-	});
-
-	context.subscriptions.push(disposable);
+	console.log('Extension "example-lm-tools" is now active');
 }
 
-// This method is called when your extension is deactivated
+/**
+ * Extension deactivation cleanup.
+ * 
+ * This function is called when your extension is deactivated.
+ * Use it to clean up resources if needed.
+ */
 export function deactivate() {}

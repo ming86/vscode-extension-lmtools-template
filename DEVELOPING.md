@@ -100,6 +100,20 @@ code-insiders --uninstall-extension ming86.example-lm-tools
 
 ## Architecture Overview
 
+### Project Structure
+
+This template follows a modular architecture. See [ARCHITECTURE.md](./ARCHITECTURE.md) for detailed documentation.
+
+```text
+src/
+├── extension.ts              # Entry point - handles registration only
+├── commands/                 # Command handlers
+├── tools/                    # Language Model Tools
+├── services/                 # Business logic and API integration
+├── utils/                    # Utility functions
+└── types/                    # TypeScript type definitions
+```
+
 ### Tool Components
 
 ```
