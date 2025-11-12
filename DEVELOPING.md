@@ -291,6 +291,83 @@ code-insiders --install-extension example-lm-tools-0.0.1.vsix
 code --extensionDevelopmentPath=/path/to/extension --extensionTestsPath=/path/to/test /path/to/workspace
 ```
 
+## Continuous Integration
+
+### GitHub Actions
+
+This template includes a GitHub Actions CI workflow (`.github/workflows/ci.yml`) for automated testing and optional publishing. The workflow is **disabled by default** but can be easily enabled.
+
+#### What the Workflow Does
+
+The CI workflow:
+
+- Runs tests on **Windows, macOS, and Linux** platforms
+- Performs **linting** (`npm run lint`)
+- Performs **type checking** (`npm run check-types`)
+- Runs the **test suite** (`npm test`)
+- Includes optional **automated publishing** to VS Code Marketplace (commented out)
+
+#### Enabling the Workflow
+
+1. **Automatic** - The workflow file is included and ready to use. GitHub Actions will detect it automatically.
+2. **Manual enable** (if needed) - Go to repository **Settings > Actions > General** and ensure "Allow all actions and reusable workflows" is selected.
+
+#### Enabling Automated Publishing (Optional)
+
+To enable automated publishing on version tags:
+
+1. **Create a VS Code Marketplace PAT:**
+   - Visit [marketplace.visualstudio.com/manage/publishers/](https://marketplace.visualstudio.com/manage/publishers/)
+   - Create a Personal Access Token with "Publish" scope
+   - Keep this token secret (never commit it to git)
+
+2. **Add the secret to GitHub:**
+   - Go to repository **Settings > Secrets and variables > Actions**
+   - Click **New repository secret**
+   - Name: `VSCE_PAT`
+   - Value: Your Personal Access Token
+
+3. **Update package.json** (if not already present):
+
+   ```json
+   {
+     "scripts": {
+       "deploy": "vsce publish"
+     }
+   }
+   ```
+
+4. **Enable publishing in the workflow:**
+   - Open `.github/workflows/ci.yml`
+   - Uncomment the `publish` job (lines starting with `# publish:`)
+   - Uncomment the `release` trigger in the `on:` section
+   - Commit and push these changes
+
+5. **Create a version tag to trigger publishing:**
+
+   ```bash
+   # Update version in package.json first
+   git tag v0.1.0
+   git push origin v0.1.0
+   ```
+
+#### Workflow Triggers
+
+By default, the workflow runs on:
+
+- Push to `main` branch
+- Pull requests to `main` branch
+
+To enable publishing on releases, uncomment the `release` trigger in the workflow file.
+
+#### GitHub Actions Documentation
+
+For more information, see:
+
+- [VS Code CI/CD Guide](https://code.visualstudio.com/api/working-with-extensions/continuous-integration#github-actions)
+- [GitHub Actions Documentation](https://docs.github.com/actions)
+- [Encrypted Secrets Guide](https://docs.github.com/actions/security-guides/encrypted-secrets)
+
 ## Best Practices
 
 ### Naming Conventions
