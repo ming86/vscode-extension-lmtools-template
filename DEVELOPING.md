@@ -106,6 +106,62 @@ code-insiders --uninstall-extension ming86.example-lm-tools
 | `npm run package` | Build production-ready VSIX package |
 | `npm run vscode:prepublish` | Prepare for VS Code Marketplace publication |
 
+### Transitioning from Template to Your Tool
+
+The example tool (`GetCurrentTimeTool`) is a working reference to help you understand how LM Tools work. **Once you're ready to build your own tool, you should remove the example code** to keep your project clean and focused.
+
+#### Files and Code to Remove
+
+When starting development on your custom tool, remove these example-specific files and references:
+
+**1. Remove example tool file:**
+
+```bash
+rm src/tools/getCurrentTimeTool.ts
+```
+
+**2. Remove example test file:**
+
+```bash
+rm src/test/extension.test.ts
+```
+
+**3. Clean up example command (if not using):**
+
+```bash
+rm src/commands/helloWorld.ts
+```
+
+**4. Update `package.json`:**
+
+- Remove the `getCurrentTime` tool from `contributes.languageModelTools`
+- Update `name`, `displayName`, `description`, and `publisher` to match your extension
+- Update `version` if appropriate
+
+**5. Update `src/extension.ts`:**
+
+- Remove the import and registration of `GetCurrentTimeTool`
+- Replace with your own tool implementation and registration
+
+**6. Update documentation:**
+
+- Customize `README.md` with your tool's description, features, and usage
+- Update `ARCHITECTURE.md` to reflect your project structure if needed
+- Update this file (`DEVELOPING.md`) with any tool-specific setup instructions
+
+#### Cleanup Checklist
+
+- [ ] Review the working example by testing it first (`npm run watch` + `F5`)
+- [ ] Update `package.json` with your extension metadata
+- [ ] Create your tool class in `src/tools/`
+- [ ] Update `src/extension.ts` to register your tool(s)
+- [ ] Delete `src/tools/getCurrentTimeTool.ts`
+- [ ] Delete or update `src/commands/` folder as needed
+- [ ] Delete `src/test/extension.test.ts` and add your own tests
+- [ ] Update `README.md` for end users
+- [ ] Verify everything compiles: `npm run check-types`
+- [ ] Test your tool with `npm run watch` + `F5`
+
 ## Architecture Overview
 
 ### Project Structure
@@ -151,7 +207,7 @@ Add your tool under `contributes.languageModelTools`:
 
 ```json
 {
-  "name": "get_current_time",
+  "name": "getCurrentTime",
   "displayName": "Get Current Time",
   "modelDescription": "Returns the current date and time. Use this when the user asks about the current time, date, or needs to know 'what time is it' or 'what's the date today'.",
   "canBeReferencedInPrompt": true,
@@ -205,7 +261,7 @@ class GetCurrentTimeTool implements vscode.LanguageModelTool<{}> {
 ```typescript
 export function activate(context: vscode.ExtensionContext) {
   const tool = vscode.lm.registerTool(
-    'get_current_time',  // Must match package.json name
+    'getCurrentTime',  // Must match package.json name
     new GetCurrentTimeTool()
   );
   context.subscriptions.push(tool);

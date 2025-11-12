@@ -6,7 +6,7 @@
  */
 
 /**
- * Input parameters for the get_current_time Language Model Tool.
+ * Input parameters for the getCurrentTime Language Model Tool.
  * 
  * This interface defines the schema for tool inputs that are validated against
  * the JSON schema defined in package.json under inputSchema.
