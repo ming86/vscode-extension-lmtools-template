@@ -63,6 +63,9 @@ npm test
 
 # Build production package
 npm run package
+
+npm run compile && npm run package && npm run vsce:package
+
 ```
 
 ### Running the Example
