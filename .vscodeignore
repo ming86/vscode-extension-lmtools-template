@@ -1,16 +1,27 @@
+# Allowlist approach: Use 'files' property in package.json for what to include.
+# This file acts as a secondary filter for edge cases.
+
+# Development files
 .vscode/**
 .vscode-test/**
 out/**
-node_modules/**
-docs/**
 src/**
+test/**
+
+# Configuration files
 .gitignore
 .yarnrc
-**/webpack.config.js
-**/esbuild.js
-vsc-extension-quickstart.md
-**/tsconfig.json
-**/eslint.config.mjs
+.eslintrc.json
+eslint.config.mjs
+tsconfig.json
+esbuild.js
+
+# Build artifacts
 **/*.map
-**/*.ts
-**/.vscode-test.*
+
+# Documentation
+vsc-extension-quickstart.md
+DEVELOPING.md
+CHANGELOG.md
+ARCHITECTURE.md
+
