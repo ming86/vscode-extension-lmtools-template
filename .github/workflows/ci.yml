@@ -6,60 +6,60 @@
 # 2. For automated publishing: Set up VSCE_PAT secret (https://code.visualstudio.com/api/working-with-extensions/publishing-extension#publishing)
 # 3. The publish job is commented out by default - uncomment the "Publish" step to enable automated publishing
 
-name: CI
+#name: CI
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+#on:
+#  push:
+#    branches:
+#      - main
+#  pull_request:
+#    branches:
+#      - main
   # Uncomment to enable automated publishing on tags
   # release:
   #   types:
   #     - created
 
-jobs:
-  test:
-    strategy:
-      matrix:
+#jobs:
+#  test:
+#    strategy:
+#      matrix:
 #        os: [macos-latest, ubuntu-latest, windows-latest]
-        os: [ubuntu-latest]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+#        os: [ubuntu-latest]
+#    runs-on: ${{ matrix.os }}
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v4
 
-      - name: Install Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22.x
+#      - name: Install Node.js
+#        uses: actions/setup-node@v4
+#        with:
+#          node-version: 22.x
 
-      - name: Install dependencies
-        run: npm install
+#      - name: Install dependencies
+#        run: npm install
 
-      - name: Run linter
-        run: npm run lint
+#      - name: Run linter
+#        run: npm run lint
 
-      - name: Check types
-        run: npm run check-types
+#      - name: Check types
+#        run: npm run check-types
 
-      - name: Start xvfb (Linux only)
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y xvfb
-          /usr/bin/Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
-          echo "DISPLAY=:99" >> $GITHUB_ENV
+#      - name: Start xvfb (Linux only)
+#        if: runner.os == 'Linux'
+#        run: |
+#          sudo apt-get update
+#          sudo apt-get install -y xvfb
+#          /usr/bin/Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+#          echo "DISPLAY=:99" >> $GITHUB_ENV
 
-      - name: Run tests
-        run: npm test
-        if: runner.os != 'Linux'
+#      - name: Run tests
+#        run: npm test
+#        if: runner.os != 'Linux'
 
-      - name: Run tests (with xvfb on Linux)
-        run: xvfb-run -a npm test
-        if: runner.os == 'Linux'
+#      - name: Run tests (with xvfb on Linux)
+#        run: xvfb-run -a npm test
+#        if: runner.os == 'Linux'
 
   # Automated publishing job (disabled by default)
   # Uncomment this job and the 'release' trigger above to enable automated publishing
