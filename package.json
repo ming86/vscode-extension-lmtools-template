@@ -2,6 +2,7 @@
   "name": "example-lm-tools",
   "displayName": "Example LM Tools",
   "description": "Example LM Tools Extension",
+  "publisher": "internal",
   "repository": {
     "type": "git",
     "url": "https://github.com/username/project-template"
