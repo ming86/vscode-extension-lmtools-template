@@ -17,9 +17,9 @@
   "activationEvents": [],
   "main": "./dist/extension.js",
   "files": [
-    "dist/**/*.js",
     "LICENSE",
-    "README.md"
+    "README.md",
+    "dist/**/*.js"
   ],
   "contributes": {
     "commands": [
